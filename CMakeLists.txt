@@ -10,7 +10,10 @@ set(PATH_LIB lib)
 set(PATH_BIN bin)
 set(PATH_TESTCASES testcases)
 
+set(PROTOBUF_INCLUDE_DIR /usr/local/include/)
+include_directories(${PROTOBUF_INCLUDE_DIR})
 include_directories(${PROJECT_SOURCE_DIR})
+
 # *.cc
 aux_source_directory(${PROJECT_SOURCE_DIR}/tinyrpc/comm COMM)
 aux_source_directory(${PROJECT_SOURCE_DIR}/tinyrpc/coroutine COR)
@@ -22,15 +25,18 @@ aux_source_directory(${PROJECT_SOURCE_DIR}/tinyrpc/net/tinypb TINYPB)
 set(COXTX ${PROJECT_SOURCE_DIR}/tinyrpc/coroutine/coctx_swap.S)
 
 add_library(tinyrpc ${COMM} ${COR} ${NET} ${HTTP} ${TCP} ${TINYPB} ${COXTX})
-install(TARGETS tinyrpc DESTINATION ${PATH_LIB})
+install(TARGETS tinyrpc DESTINATION ${PATH_LIB}) #make install
 
 
-find_package(Protobuf REQUIRED)
-if (${PROTOBUF_FOUND})
-    message("protobuf found")
-else ()
-    message(FATAL_ERROR "Cannot find Protobuf")
-endif ()
+#find_package(Protobuf REQUIRED)
+#if (${PROTOBUF_FOUND})
+#    message("protobuf found: ${Protobuf_INCLUDE_DIR}; ${Protobuf_LIBRARY};")
+#else ()
+#    message(FATAL_ERROR "Cannot find Protobuf")
+#endif ()
+
+#除了用上面这种find_package的方式找protobuf库文件和头文件，还可以直接自己指定库
+set(Protobuf_LIBRARY /usr/local/lib/libprotobuf.a)
 
 set(tinyxml /usr/lib/libtinyxml.a)
 
